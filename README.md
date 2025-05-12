@@ -1,4 +1,4 @@
-**💳 Payment Processing System
+🚀 Features
 A robust full-stack application designed to handle high-volume payment transactions securely and efficiently. Supports credit/debit card and bank transfers with a modern, responsive UI and a scalable backend infrastructure.
 
 🚀 Features
