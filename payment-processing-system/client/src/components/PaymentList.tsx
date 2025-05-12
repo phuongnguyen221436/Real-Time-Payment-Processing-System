@@ -1,114 +1,47 @@
-import React, { useState } from 'react';
-import { ListContainer, PaymentItem, SearchInput, PaginationControls, PaymentDetails, PaymentText, SelectContainer, Select } from '../styles';
+import React from 'react';
+import { Payment } from '../types';
 
-interface Payment {
-    _id: string;
-    amount: number;
-    method: string;
-    status: string;
-    date: string;
+interface Props {
+  payments: Payment[];
 }
 
-interface PaymentListProps {
-    payments: Payment[];
-}
+const PaymentList: React.FC<Props> = ({ payments }) => {
+  return (
+    <div className="mt-8">
+      <h3 className="text-lg font-bold mb-4 text-gray-800">Payment History</h3>
 
-const methods = ['All', 'Credit Card', 'PayPal', 'Bank Transfer'];
-const statuses = ['All', 'Pending', 'Completed', 'Failed'];
-
-const PaymentList: React.FC<PaymentListProps> = ({ payments }) => {
-    const [filter, setFilter] = useState<string>('');
-    const [selectedMethod, setSelectedMethod] = useState<string>('All');
-    const [selectedStatus, setSelectedStatus] = useState<string>('All');
-    const [sortBy, setSortBy] = useState<string>('date');
-    const [page, setPage] = useState<number>(1);
-    const itemsPerPage = 10;
-
-    const filteredPayments = payments.filter(payment => {
-        const methodMatch = selectedMethod === 'All' || payment.method === selectedMethod;
-        const statusMatch = selectedStatus === 'All' || payment.status === selectedStatus;
-        return methodMatch && statusMatch && payment.method.toLowerCase().includes(filter.toLowerCase());
-    });
-
-    const sortedPayments = filteredPayments.sort((a, b) => {
-        if (sortBy === 'amount') {
-            return b.amount - a.amount;
-        }
-        if (sortBy === 'status') {
-            return a.status.localeCompare(b.status);
-        }
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
-    const paginatedPayments = sortedPayments.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
-    return (
-        <ListContainer>
-            <SearchInput
-                type="text"
-                placeholder="Search by method"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-            />
-            <SelectContainer>
-                <Select
-                    id="method"
-                    value={selectedMethod}
-                    onChange={(e) => setSelectedMethod(e.target.value)}
+      {payments.length === 0 ? (
+        <p className="text-gray-500 text-sm">No payments recorded yet.</p>
+      ) : (
+        <div className="space-y-4">
+          {payments.map((p) => (
+            <div
+              key={p.id}
+              className="rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition bg-white"
+            >
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-lg font-semibold text-gray-700">${p.amount}</span>
+                <span
+                  className={`px-3 py-1 text-sm rounded-full font-medium ${
+                    p.status === 'Completed'
+                      ? 'bg-green-100 text-green-700'
+                      : p.status === 'Pending'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}
                 >
-                    {methods.map((methodOption) => (
-                        <option key={methodOption} value={methodOption}>
-                            {methodOption}
-                        </option>
-                    ))}
-                </Select>
-
-                <Select
-                    id="status"
-                    value={selectedStatus}
-                    onChange={(e) => setSelectedStatus(e.target.value)}
-                >
-                    {statuses.map((statusOption) => (
-                        <option key={statusOption} value={statusOption}>
-                            {statusOption}
-                        </option>
-                    ))}
-                </Select>
-            </SelectContainer>
-
-            <div>
-                <label htmlFor="sort">Sort by:</label>
-                <Select
-                    id="sort"
-                    onChange={(e) => setSortBy(e.target.value)}
-                    value={sortBy}
-                >
-                    <option value="date">Date</option>
-                    <option value="amount">Amount</option>
-                    <option value="status">Status</option>
-                </Select>
+                  {p.status}
+                </span>
+              </div>
+              <div className="text-sm text-gray-600">
+                {p.method} • {new Date(p.date).toLocaleString()}
+              </div>
             </div>
-
-            {paginatedPayments.length === 0 ? (
-                <p>No payments available.</p>
-            ) : (
-                paginatedPayments.map(payment => (
-                    <PaymentItem key={payment._id}>
-                        <PaymentDetails>
-                            <PaymentText><strong>Amount:</strong> ${payment.amount}</PaymentText>
-                            <PaymentText><strong>Method:</strong> {payment.method}</PaymentText>
-                            <PaymentText><strong>Status:</strong> {payment.status}</PaymentText>
-                            <PaymentText><strong>Date:</strong> {new Date(payment.date).toLocaleDateString()}</PaymentText>
-                        </PaymentDetails>
-                    </PaymentItem>
-                ))
-            )}
-            <PaginationControls>
-                <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>Previous</button>
-                <button onClick={() => setPage(prev => prev + 1)} disabled={paginatedPayments.length < itemsPerPage}>Next</button>
-            </PaginationControls>
-        </ListContainer>
-    );
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default PaymentList;

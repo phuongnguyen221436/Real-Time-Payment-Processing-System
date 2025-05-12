@@ -1,76 +1,132 @@
-import React, { useState } from 'react';
-import { FormContainer, Form, Label, Input, Select, Button } from '../styles';
+import React, { useState, useEffect } from 'react';
+import { Payment, PaymentStatus } from '../types';
 
-interface Payment {
-    _id: string;
-    amount: number;
-    method: string;
-    status: string;
-    date: string;
+
+interface Props {
+  onAdd: (payment: Payment) => void;
+  defaultAmount: number;
 }
 
-interface PaymentFormProps {
-    onPaymentSuccess: (payment: Payment) => void;
-}
+const PaymentForm: React.FC<Props> = ({ onAdd, defaultAmount }) => {
+  const [amount, setAmount] = useState<number>(defaultAmount);
+  const [method, setMethod] = useState<string>('💳 Credit Card');
+  const [status, setStatus] = useState<PaymentStatus>('Completed');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentSuccess }) => {
-    const [amount, setAmount] = useState<number>(0);
-    const [method, setMethod] = useState<string>('Credit Card');
-    const [status, setStatus] = useState<string>('Pending');
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsProcessing(true);
+  
+    setTimeout(() => {
         const newPayment: Payment = {
-            _id: `${Date.now()}`,
+            id: Date.now(),
             amount,
             method,
             status,
             date: new Date().toISOString(),
-        };
-        onPaymentSuccess(newPayment);
-        setAmount(0);
-        setMethod('Credit Card');
-        setStatus('Pending');
-    };
+            name,
+            email,
+          };
+          
+      onAdd(newPayment);
+      setAmount(defaultAmount);
+      setIsProcessing(false);
+    }, 2000); // simulate 2 seconds of processing
+  };
+  
 
-    return (
-        <FormContainer>
-            <Form onSubmit={handleSubmit}>
-                <Label htmlFor="amount">Amount</Label>
-                <Input
-                    type="number"
-                    id="amount"
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                    required
-                />
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {/* 🔒 Secure Badge */}
+      <div className="flex items-center justify-center gap-2 text-sm text-green-600 mb-1">
+        <span>🔒 Secure Payment</span>
+      </div>
+      <div>
+  <label className="block font-semibold text-gray-700">Full Name</label>
+  <input
+    type="text"
+    value={name}
+    onChange={(e) => setName(e.target.value)}
+    required
+    className="w-full p-3 rounded-lg border border-gray-300 mt-1"
+  />
+</div>
 
-                <Label htmlFor="method">Payment Method</Label>
-                <Select
-                    id="method"
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value)}
-                >
-                    <option value="Credit Card">Credit Card</option>
-                    <option value="PayPal">PayPal</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                </Select>
+<div>
+  <label className="block font-semibold text-gray-700">Email</label>
+  <input
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    required
+    className="w-full p-3 rounded-lg border border-gray-300 mt-1"
+  />
+</div>
 
-                <Label htmlFor="status">Status</Label>
-                <Select
-                    id="status"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                >
-                    <option value="Pending">Pending</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Failed">Failed</option>
-                </Select>
 
-                <Button type="submit">Add Payment</Button>
-            </Form>
-        </FormContainer>
-    );
+      {/* Amount */}
+      <div>
+        <label className="block font-semibold text-gray-700">Amount</label>
+        <input
+          type="number"
+          value={amount}
+          onChange={e => setAmount(Number(e.target.value))}
+          className="w-full p-3 rounded-lg border border-gray-300 mt-1"
+        />
+      </div>
+
+      {/* Payment Method with Icons */}
+      <div>
+        <label className="block font-semibold text-gray-700">Payment Method</label>
+        <select
+          value={method}
+          onChange={e => setMethod(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 mt-1"
+        >
+          <option>💳 Credit Card</option>
+          <option>🅿️ PayPal</option>
+          <option>🏦 Bank Transfer</option>
+        </select>
+      </div>
+
+      {/* Status */}
+      <div>
+        <label className="block font-semibold text-gray-700">Status</label>
+        <select
+          value={status}
+          onChange={e => setStatus(e.target.value as PaymentStatus)}
+          className="w-full p-3 rounded-lg border border-gray-300 mt-1"
+        >
+          <option>Completed</option>
+          <option>Pending</option>
+          <option>Failed</option>
+        </select>
+      </div>
+
+      {/* Total */}
+      <p className="text-right font-semibold text-gray-900 text-lg">
+        Total Due: ${amount}
+      </p>
+
+      {/* Submit */}
+      <button
+  type="submit"
+  disabled={isProcessing}
+  className={`w-full text-white font-semibold py-3 rounded-lg transition ${
+    isProcessing
+      ? 'bg-gray-500 cursor-not-allowed'
+      : 'bg-gray-900 hover:bg-gray-800'
+  }`}
+>
+  {isProcessing ? 'Processing...' : 'Complete Purchase'}
+</button>
+
+    </form>
+  );
 };
 
 export default PaymentForm;

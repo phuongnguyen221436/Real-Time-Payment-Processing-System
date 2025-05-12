@@ -51,7 +51,7 @@ import path from 'path';
 
 const router: Router = Router();
 
-const filePath = path.join(__dirname, 'payments.json');
+const filePath = path.join(__dirname, '../data/payments.json');
 
 // Load payments from file
 const loadPayments = async () => {
