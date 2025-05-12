@@ -1,68 +1,66 @@
+
 # 💳 Payment Processing System
-A robust full-stack application designed to handle high-volume payment transactions securely and efficiently. Supports credit/debit card and bank transfers with a modern, responsive UI and a scalable backend infrastructure.
 
-🚀 Features
-🔷 Frontend:
-Built with React for a responsive and intuitive user experience across devices.
+A full-stack e-commerce transaction engine built to simulate real-world checkout flows using modern backend infrastructure. Supports secure, scalable processing of credit, debit, and bank payments with real-time admin and user insights.
 
-🔶 Backend:
+## 🚀 Features
 
-Node.js for handling RESTful APIs and routing.
+* **💼 Simulated E-Commerce Checkout**
+  Supports card and bank transfer "payments" with dynamic amount, method, and status logging for each transaction.
 
-Java (Spring Boot) for managing secure transaction processing and business logic.
+* **🗃️ Dual-Database Architecture**
 
-🗄️ Dual Database Architecture:
+  * **SQL** for structured order/payment data with ACID guarantees
+  * **MongoDB** for unstructured transaction metadata and audit logs
 
-SQL (PostgreSQL/MySQL): Ensures ACID compliance and data integrity.
+* **🔐 Secure RESTful API Layer**
+  Built with Node.js, Express, and Spring Boot for managing user transactions, account access, and reporting endpoints.
 
-MongoDB: Stores unstructured or auxiliary data for flexible management.
+* **⚙️ DevOps Ready**
 
-🔌 API Integration:
-RESTful APIs for account creation, transaction management, and third-party service connectivity.
+  * **Docker** for containerized deployment
+  * **AWS** for scalable cloud hosting
+  * **Jenkins** for CI/CD integration
 
-⚙️ DevOps & Deployment:
+* **📈 Admin Dashboard (API Level)**
+  Admins can view all transaction records, filter by status or method, and simulate refunds or settlements.
 
-Docker for containerization
+---
 
-Jenkins for CI/CD pipelines
+## 🧰 Tech Stack
 
-AWS for cloud hosting and scalability
+* **Frontend:** React, TypeScript, Axios
+* **Backend:** Node.js, Express, Spring Boot
+* **Databases:** PostgreSQL, MongoDB
+* **DevOps:** Docker, AWS, Jenkins
+* **Other:** WebSockets, AJAX, REST APIs
 
-🛠️ Installation
-bash
-Copy
-Edit
-# Clone the repository
+---
+
+## 📦 Run Locally
+
+```bash
+# Clone the repo
 git clone https://github.com/yourusername/payment-processing-system.git
 cd payment-processing-system
-Frontend Setup (React)
-bash
-Copy
-Edit
+
+# Install backend dependencies
+npm install
+
+# Start backend
+npm run dev
+
+# (Optional) Start frontend if separated
 cd frontend
 npm install
 npm start
-Backend Setup (Node.js / Spring Boot)
-bash
-Copy
-Edit
-cd backend
-# For Node.js
-npm install
-node server.js
+```
 
-# OR for Spring Boot
-# Run your Spring Boot application using your IDE or terminal
-⚙️ Make sure to configure environment variables for database connections and API keys before running.
+> ⚠️ Make sure to configure your `.env` with your database connection strings before running.
 
-🌐 Usage
-Navigate to the app in your browser
+---
 
-Users: Submit secure payment details, manage accounts
+## 📝 About the Project
 
-Admins: Access admin dashboard, monitor transactions, manage users
+This system was built as a robust simulation of how enterprise-grade checkout systems like Stripe or PayPal operate under the hood. It showcases fault-tolerant backend architecture, performance optimization, and multi-database orchestration — ideal for demonstrating backend design, DevOps readiness, and full-stack systems thinking.
 
-📸 Screenshots
-
-📄 License
-MIT License
