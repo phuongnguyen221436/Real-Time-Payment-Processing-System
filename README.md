@@ -38,14 +38,14 @@ A full-stack e-commerce transaction engine built to simulate real-world checkout
 ---
 ## 🚀 Live Demo
 
-🌍 [View deployed app on Render]([https://your-app.onrender.com](https://payment-processing-system-2.onrender.com/))
+🌍 [View deployed app on Render]([https://payment-processing-system-2.onrender.com/])
 ---
 
 ## 📦 Run Locally
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/payment-processing-system.git
+git clone https://github.com/phuongnguyen221436/payment-processing-system.git
 cd payment-processing-system
 
 # Install backend dependencies
